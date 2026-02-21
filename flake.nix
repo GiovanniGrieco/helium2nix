@@ -32,11 +32,11 @@
           pkgs.appimageTools.wrapType2 rec {
 
             pname = "helium";
-            version = "0.8.5.1";
+            version = "0.9.3.1";
 
             src = pkgs.fetchurl {
               url = "https://github.com/imputnet/helium-linux/releases/download/${version}/${pname}-${version}-x86_64.AppImage";
-              sha256 = "sha256-jFSLLDsHB/NiJqFmn8S+JpdM8iCy3Zgyq+8l4RkBecM=";
+              sha256 = "sha256-wUmFmfZPWSvPzArbegegQpY1CFu/XAguqPQpINDE2qY=";
             };
 
             _enableFeatures =
@@ -59,9 +59,11 @@
               in
               ''
                 wrapProgram $out/bin/${pname} \
-                  ${pkgs.lib.optionalString (
-                    _enableFeatures != [ ]
-                  ) "--add-flags \"--enable-features=${pkgs.lib.strings.concatStringsSep "," _enableFeatures}\""} \
+                  ${
+                    pkgs.lib.optionalString (
+                      _enableFeatures != [ ]
+                    ) "--add-flags \"--enable-features=${pkgs.lib.strings.concatStringsSep "," _enableFeatures}\""
+                  } \
                   ${pkgs.lib.optionalString (
                     commandLineArgs != [ ]
                   ) "--add-flags \"${pkgs.lib.strings.concatStringsSep " " commandLineArgs}\""}
